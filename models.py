@@ -7,30 +7,32 @@ from sqlalchemy.sql import func
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cars_and_moto_db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFIACTIONS'] = False
 
 db = SQLAlchemy(app)
 
-class users(db.Model):
+class Users(db.Model):
     __tablename__ = "users"
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("vardas", db.String(66))
     surname =db.Column("pavarde", db.String(66))
     email = db.Column("email", db.String(99), unique=True)
     telnr = db.Column("telnr", db.String(16))
-    
+    carss = db.relationship('Cars', backref='cars', lazy=True)
+    motos = db.relationship('Moto', backref='moto', lazy=True)
+
     def __init__(self, name, surname, email, telnr):
         self.name = name
         self.surname = surname
         self.email = email
         self.telnr = telnr
 
-class cars(db.Model):
+class Cars(db.Model):
     __tablename__ = "cars"
     id = db.Column("id", db.Integer, primary_key=True)
-    user_id = db.Column("user_id", db.Integer, db.ForeignKey('users.id'))
-    car_user = db.relationship("users", backref=db.backref("moto_users", uselist=False))
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    cars_user = db.relationship("Users", backref="cars_users", lazy=True)
     brand = db.Column("marke", db.String(66))
     model = db.Column("modelis", db.String(66))
     # year = db.Column("Metai", db.DateTime(datetime.date))
@@ -53,16 +55,16 @@ class cars(db.Model):
         self.kaina = kaina
         self.vin_code = vin_code
         
-class moto(db.Model):
+class Moto(db.Model):
     __tablename__ = "moto"
     id = db.Column("id", db.Integer, primary_key=True)
-    user_id = db.Column("user_id", db.Integer, db.ForeignKey('users.id'))
-    moto_user = db.relationship("users", backref=db.backref("users", uselist=False))
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'))
+    motos_user = db.relationship("users", backref="moto_users")
     brand = db.Column("marke", db.String(66))
     model = db.Column("modelis", db.String(66))
     tipas = db.Column('tipas', db.String(66))
     year = db.Column("metai", db.String(4))
-    rida = db.Column('rirda', db.Float())
+    rida = db.Column('rida', db.Float())
     cc = db.Column("galingumas", db.Integer())
     kaina = db.Column("Kkaina", db.Float())
     svoris = db.Column("svoris", db.Float())

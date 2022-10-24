@@ -1,0 +1,40 @@
+{% extends 'base.html' %} 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sukurkite motociklo irasa</title>
+    <link rel="stylesheet" href="style.css">
+    {% block main %}
+  </head>
+  <body>
+    <h3>Sukurkite motociklo irasa</h3>
+      <form action="/create_moto" method= "post"><br>
+            <label for="name">Vartotojo ID</label><br>
+            <input type='text' name='user_id' placeholder="Vartotojo ID" /><br>
+            <label for="brand">Marke</label><br>
+            <input type='text' name='brand' placeholder="Marke" /><br>
+            <label for="model">Modelis</label><br>
+            <input type='text' name='model' placeholder="Modelis" /><br>
+            <label for="year">Metai</label><br>
+            <input type='text' name='year' placeholder="Metai" /><br>
+            <label for="rida">Rida</label><br>
+            <input type='text' name='rida' placeholder="Rida" /><br>
+            <label for="tipas">Tipas</label><br>
+            <input type='text' name='tipas' placeholder="Tipas" /><br>
+            <label for="cc">Galingumas</label><br>
+            <input type='text' name='cc' placeholder="Galingumas" /><br>
+            <label for="kaina">Kaina(€)</label><br>
+            <input type='text' name='kaina' placeholder="Kaina" /><br>
+            <label for="svoris">Svoris(kg)</label><br>
+            <input type='text' name='svoris' placeholder="Svoris(Kg)" /><br>
+            <input type = "submit" value = "Sukurti" />
+       </form>   
+  </body>
+</html>
+
+{% endblock %}
+
+

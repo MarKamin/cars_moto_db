@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Visos masinos</title>
+    <link rel="stylesheet" href="style.css">
+   {%  block main %}
+  </head>
+  <body>
+      <h3>Visi automobiliai</h3>
+      <hr></hr>
+      <table>
+        <thead>
+           <tr>
+              <th>USER ID</th>
+              <th>C/U ID</th>
+              <th>CAR ID</th>
+              <th>Marke</th>
+              <th>Modelis</th>
+              <th>Metai</th>
+              <th>Rida</th>
+              <th>Kuras</th>
+              <th>Kebulas</th>
+              <th>Kaina(€)</th>
+              <th>Vin Code</th>
+              <th>Sukurimo data</th>
+              <th>Trinimas</th>
+           </tr>
+        </thead>
+        
+        <tbody>
+           {% for car in cars %}
+              <tr>
+                 <td>{{ car.user_id }}</td>
+                 <td>{{ car.cars_user }}</td>
+                 <td>{{ car.id }}</td>
+                 <td>{{ car.brand }}</td>
+                 <td>{{ car.model }}</td>
+                 <td>{{ car.year }}</td>
+                 <td>{{ car.rida }}</td>
+                 <td>{{ car.kuras }}</td>
+                 <td>{{ car.kebulas }}</td>
+                 <td>{{ car.kaina }}</td>
+                 <td>{{ car.vin_code }}</td>
+                 <td>{{ car.date_created }}</td>
+                 <td>
+                  <form action="/delete_irasas_auto" method= "POST"><br>
+                      <input type="hidden" value="{{car.id}}" name="car_id">
+                      <input type="submit" value="ISTRINTI">
+                  </form>
+                 </td>
+              </tr>
+           {% endfor %}
+        </tbody>
+     </table>
+  </body>
+</html>
+
+{% endblock %}

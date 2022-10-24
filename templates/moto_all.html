@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Visi motociklai</title>
+    <link rel="stylesheet" href="style.css">
+   {%  block main %}
+  </head>
+  <body>
+      <h3>Visi motociklai</h3>
+      <hr></hr>
+      <table>
+        <thead>
+           <tr>
+              <th>USER ID</th>
+              <th>MOTO ID</th>
+              <th>Marke</th>
+              <th>Modelis</th>
+              <th>Tipas</th>
+              <th>Metai</th>
+              <th>Rida</th>
+              <th>Galia (cm³)</th>
+              <th>Kaina(€)</th>
+              <th>Svoris(kg)</th>
+              <th>Sukurimo data</th>
+           </tr>
+        </thead>
+        
+        <tbody>
+           {% for mot in moto %}
+              <tr>
+                 <td>{{ mot.user_id }}</td>
+                 <td>{{ mot.id }}</td>
+                 <td>{{ mot.brand }}</td>
+                 <td>{{ mot.model }}</td>
+                 <td>{{ mot.tipas }}</td>
+                 <td>{{ mot.year }}</td>
+                 <td>{{ mot.rida }}</td>
+                 <td>{{ mot.cc }}</td>
+                 <td>{{ mot.kaina }}</td>
+                 <td>{{ mot.svoris }}</td>
+                 <td>{{ mot.date_created }}</td>
+                 <td>
+                    <form action="/delete_irasas_moto" method= "POST"><br>
+                        <input type="hidden" value="{{mot.id}}" name="moto_id">
+                        <input type="submit" value="ISTRINTI">
+                    </form>
+                 </td>
+                </tr>
+           {% endfor %}
+        </tbody>
+     </table>
+  </body>
+</html>
+
+{% endblock %}

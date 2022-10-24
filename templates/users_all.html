@@ -1,0 +1,52 @@
+{% extends 'base.html' %} 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Visi vartotojai</title>
+    <link rel="stylesheet" href="style.css">
+    {% block main %}
+  </head>
+  <body>
+      <h3>Visi vartotojai</h3>
+      <hr></hr>
+      <table>
+        <thead>
+           <tr>
+              <th>USER ID</th>
+              <th>Vardas</th>
+              <th>Pavarde</th>
+              <th>El. pastas</th>
+              <th>Tel.nr</th>
+              <th>Turimos masinos:</th>
+              <th>Turimi motociklai:</th>
+              <th>Pasalinti vartotoja</th>
+           </tr>
+        </thead>
+        
+        <tbody>
+           {% for user in users %}
+              <tr>
+                 <td>{{ user.id }}</td>
+                 <td>{{ user.name }}</td>
+                 <td>{{ user.surname }}</td>
+                 <td>{{ user.email }}</td>
+                 <td>{{ user.telnr }}</td>  
+                 <td>{{ user.carss }}</td>
+                 <td>{{ user.motos }}</td>
+                 <td><form action="/delete_irasas_user" method= "POST"><br>
+                  <input type="hidden" value="{{user.id}}" name="user_id">
+                  <input type="submit" value="ISTRINTI">
+                 </form>
+                 </td>
+              </tr>
+           {% endfor %}
+        </tbody>
+     </table>
+     
+  </body>
+</html>
+
+{% endblock %}
