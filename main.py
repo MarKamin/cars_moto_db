@@ -5,7 +5,10 @@ from sqlalchemy.exc import IntegrityError
 
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    viso = Users.query.count()
+    viso_auto= Cars.query.count()
+    viso_moto= Moto.query.count()
+    return render_template('home.html', viso=viso, viso_auto=viso_auto, viso_moto=viso_moto)
 
 @app.route("/create_user", methods = ['GET', 'POST'])
 def create_user():
@@ -55,8 +58,15 @@ def show_all_users():
 
 @app.route('/cars_all')
 def show_all_cars():
-    return render_template('cars_all.html', cars = Cars.query.all() )
-    # return render_template('cars_all.html', carsa = cars.query.filter_by(year = 2010))
+    # expensive = db.session.execute(db.select(Cars).filter(Cars.kaina >= 5000)).all()
+    return render_template('cars_all.html', cars = Cars.query.all())
+    
+
+@app.route('/cars_exp')
+def cars_exp():
+    expensive = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id, 
+    Cars.date_created, Cars.kebulas, Cars.kuras, Cars.model, Cars.year, Cars.rida, Cars.vin_code).filter(Cars.kaina >= 5000)).all()
+    return render_template('cars_exp.html', users = Users.query.all(), expensive=expensive )
 
 @app.route('/moto_all', methods = ['GET', 'POST'])
 def show_all_moto():

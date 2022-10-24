@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFIACTIONS'] = False
 db = SQLAlchemy(app)
 
 class Users(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "Users"
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("vardas", db.String(66))
     surname =db.Column("pavarde", db.String(66))
@@ -29,7 +29,7 @@ class Users(db.Model):
         self.telnr = telnr
 
 class Cars(db.Model):
-    __tablename__ = "cars"
+    __tablename__ = "Cars"
     id = db.Column("id", db.Integer, primary_key=True)
     user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'), nullable=False)
     cars_user = db.relationship("Users", backref="cars_users", lazy=True)
@@ -56,10 +56,10 @@ class Cars(db.Model):
         self.vin_code = vin_code
         
 class Moto(db.Model):
-    __tablename__ = "moto"
+    __tablename__ = "Moto"
     id = db.Column("id", db.Integer, primary_key=True)
     user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'))
-    motos_user = db.relationship("users", backref="moto_users")
+    motos_user = db.relationship("Users", backref="moto_users")
     brand = db.Column("marke", db.String(66))
     model = db.Column("modelis", db.String(66))
     tipas = db.Column('tipas', db.String(66))
