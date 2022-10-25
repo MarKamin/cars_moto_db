@@ -10,7 +10,7 @@
     {% block main %}
   </head>
   <body>
-      <h3>Visi vartotojai</h3>
+      <h3>Visi vartotojai:</h3>
       <hr></hr>
       <table>
         <thead>
@@ -37,13 +37,13 @@
                  <td>{{ user.telnr }}</td>  
                  <td>
                      {% for car in user.cars %}
-                     <p>[{{car.brand}},{{car.model}}]</p>
+                     <p>[{{car.brand}}-{{car.model}}]</p>
                      {% endfor %}
                  </td>
                  <td>
                      
                     {% for mot in user.motos %}
-                    <p>[{{mot.brand}},{{mot.model}}]</p>
+                    <p>[{{mot.brand}}-{{mot.model}}]</p>
                     {% endfor %}
                 </td>
                  <td>

@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from models import Users, app, db, Cars, Moto, AutoTaisykla
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import IntegrityError, NoResultFound, StatementError
 from sqlalchemy import select
+from flask_sqlalchemy import record_queries
+
+
 
 @app.route("/home")
 def home():
@@ -33,7 +36,7 @@ def create_user():
 def create_car():
     if request.method == 'POST':
         try:
-            stmt = db.select(Users).where(Users.id == request.form['user_id'])
+            stmt = db.select(Users).where(Users.id == request.form['user_id']) # [? ? ? ?]
             print(type(stmt))
             user = db.session.scalars(stmt).one()
             # Scalar = Return the first element of the first result or None if no rows present. If multiple rows are returned, raises MultipleResultsFound.
@@ -43,13 +46,14 @@ def create_car():
             db.session.add(masina)
             db.session.commit()
             return '''<h1>Irasas sukurtas sekmingai</h1>
-                            <a href="/home"> I pradzia </a> '''
+                            <a href="/home"> I pradzia </a> 
+                            <a href="/create_car"> Kurti kita irasa </a> '''
         except NoResultFound:
             return '<h1> Userio nera </h1>'
-        except ValueError:
+        except StatementError:
             db.session.rollback()
             return '''<h1>Kazka ivedete netaip Perziurekite ir bandykite dar karta.</h1>
-                      <a href="/create_user"> I pradzia </a> '''
+                      <a href="/create_car"> I pradzia </a> '''
     return render_template('create_car.html')
 
 @app.route("/create_moto", methods = ['GET', 'POST'])
@@ -87,7 +91,25 @@ def show_all_cars():
 def cars_exp():
     expensive = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id, 
     Cars.date_created, Cars.kebulas, Cars.kuras, Cars.model, Cars.year, Cars.rida, Cars.vin_code).filter(Cars.kaina >= 5000)).all()
-    return render_template('cars_exp.html', users = Users.query.all(), expensive=expensive )
+    return render_template('cars_exp.html', expensive=expensive)
+
+@app.route('/cars_cheap')
+def cars_cheap():
+    cheap = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id, 
+    Cars.date_created, Cars.kebulas, Cars.kuras, Cars.model, Cars.year, Cars.rida, Cars.vin_code).filter(Cars.kaina <= 5000)).all()
+    return render_template('cars_cheap.html', cheap=cheap )
+
+    # disel = session.execute(
+    # select(Cars).where(Cars.kuras.like("%yzel%")).all
+
+@app.route('/cars_diesel')
+def cars_diesel():
+    diesel = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id, 
+    Cars.date_created, Cars.kebulas, Cars.kuras, Cars.model, Cars.year, Cars.rida, Cars.vin_code).filter(Cars.kuras.like("%yzel%"))).all()
+    # diesel = db.session.execute(db.select(Cars).where(Cars.kuras.like("%yzel%"))).all()
+    # diesel = db.session.execute(db.select(Cars).filter(Cars.kuras.like("%yzel%"))).all()
+    return render_template('cars_diesel.html', diesel=diesel)
+    #db.select =  SQL executable arba 'construct'
 
 @app.route('/moto_all', methods = ['GET', 'POST'])
 def show_all_moto():
@@ -134,7 +156,29 @@ def delete_user():
 with app.app_context():
     db.create_all()
     
+######################## Kodas kad debugint sql queries ################
+def sql_debug(response):
+    queries = list(record_queries.get_recorded_queries())
+    query_str = ''
+    total_duration = 0.0
+    for q in queries:
+        total_duration += q.duration
+        stmt = str(q.statement % q.parameters).replace('\n', '\n       ')
+        query_str += 'Query: {0}\nDuration: {1}ms\n\n'.format(stmt, round(q.duration * 1000, 2))
+
+    print ('=' * 80)
+    print (' SQL Queries - {0} Queries Executed in {1}ms'.format(len(queries), round(total_duration * 1000, 2)))
+    print ('=' * 80)
+    print (query_str.rstrip('\n'))
+    print ('=' * 80 + '\n')
+
+    return response
+
+if app.debug:
+    app.after_request(sql_debug)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
     db.create_all()
+

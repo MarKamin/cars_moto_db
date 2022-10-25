@@ -10,7 +10,7 @@
    {%  block main %}
   </head>
   <body>
-      <h3>Visi servisai</h3>
+      <h3>Visi servisai (Kolkas tik automobiliu):</h3>
       <hr></hr>
       <table>
         <thead>
@@ -30,7 +30,7 @@
                  <td>{{ serv.auto_id }}</td>
                  <td>{{ serv.pavadinimas }}</td>
                  <td>{{ serv.spec }}</td>
-                 <td>{{ serv.rating }}</td>
+                 <td>{{ serv.rating }}/10 &#9733;</td>
               </tr>
            {% endfor %}
         </tbody>

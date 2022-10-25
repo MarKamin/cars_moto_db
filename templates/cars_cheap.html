@@ -12,14 +12,14 @@
   <body>
       <h3>Visi automobiliai</h3>
       <form action="/cars_exp" form style="display:inline-block">
-         <button type="submit">Masinos kuriu kaina virs 5000</button>
-       </form>
+        <button type="submit">Masinos kuriu kaina virs 5000</button>
+      </form>
       <form action="/cars_cheap" form style="display:inline-block">
-         <button type="submit">Masinos kuriu kaina zemiau 5000</button>
-       </form>
-       <form action="/cars_diesel" form style="display:inline-block">
-         <button type="submit">Dyzeliai</button>
-       </form>
+        <button type="submit">Masinos kuriu kaina zemiau 5000</button>
+      </form>
+      <form action="/cars_diesel" form style="display:inline-block">
+        <button type="submit">Dyzeliai</button>
+      </form>
       <form action="/cars_all" form style="display:inline-block">
          <button type="submit">Grizti</button>
        </form>
@@ -44,7 +44,7 @@
         </thead>
         
         <tbody>
-           {% for car in expensive %}
+           {% for car in cheap %}
               <tr>
                  <td>{{ car.user_id }}</td>
                  <!--td>{{ car.cars_user }}</td-->

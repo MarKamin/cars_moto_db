@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cars_and_moto_db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFIACTIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
 
@@ -56,6 +57,9 @@ class Cars(db.Model):
         self.kebulas = kebulas
         self.kaina = kaina
         self.vin_code = vin_code
+
+    def __repr__(self, user_id, brand, model, year, rida, kuras, kebulas, kaina, vin_code):
+        return f"{self.user_id}, {self.brand}, {self.model}, {self.year}, {self.rida}, {self.kuras}, {self.kebulas}, {self.kaina}, {self.vin_code}"
         
 class Moto(db.Model):
     __tablename__ = "Moto"

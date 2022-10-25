@@ -10,10 +10,17 @@
    {%  block main %}
   </head>
   <body>
-      <h3>Visi automobiliai</h3>
+      <h3>Visi automobiliai:</h3>
       <form action="/cars_exp" form style="display:inline-block">
         <button type="submit">Masinos kuriu kaina virs 5000</button>
       </form>
+      <form action="/cars_cheap" form style="display:inline-block">
+        <button type="submit">Masinos kuriu kaina zemiau 5000</button>
+      </form>
+      <form action="/cars_diesel" form style="display:inline-block">
+        <button type="submit">Dyzeliai</button>
+      </form>
+      
       <hr></hr>
       <table>
         <thead>
@@ -23,13 +30,13 @@
               <th>CAR ID</th>
               <th>Marke</th>
               <th>Modelis</th>
+              <th>Rida(km)</th>
               <th>Metai</th>
-              <th>Rida</th>
               <th>Kuras</th>
               <th>Kebulas</th>
               <th>Kaina(€)</th>
-              <th>Vin Code</th>
-              <th>Sukurimo data</th>
+              <th>VIN Code</th>
+              <th>Sukurimo data(iraso)</th>
               <th>Trinimas</th>
            </tr>
         </thead>
