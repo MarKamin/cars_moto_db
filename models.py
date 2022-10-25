@@ -19,8 +19,9 @@ class Users(db.Model):
     surname =db.Column("pavarde", db.String(66))
     email = db.Column("email", db.String(99), unique=True)
     telnr = db.Column("telnr", db.String(16))
-    carss = db.relationship('Cars', backref='cars', lazy=True)
+    cars = db.relationship('Cars', backref='cars', lazy=True)
     motos = db.relationship('Moto', backref='moto', lazy=True)
+    servisas = db.relationship("AutoTaisykla", backref="autoservisas", lazy=True)
 
     def __init__(self, name, surname, email, telnr):
         self.name = name
@@ -33,6 +34,7 @@ class Cars(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'), nullable=False)
     cars_user = db.relationship("Users", backref="cars_users", lazy=True)
+    servisas = db.relationship("AutoTaisykla", backref="Autoservisas", lazy=True)
     brand = db.Column("marke", db.String(66))
     model = db.Column("modelis", db.String(66))
     # year = db.Column("Metai", db.DateTime(datetime.date))
@@ -81,4 +83,21 @@ class Moto(db.Model):
         self.cc = cc
         self.kaina = kaina
         self.svoris = svoris
+
+class AutoTaisykla(db.Model):
+    __tablename__ = 'taisykla'
+    id = db.Column('id', db.Integer, primary_key=True)
+    auto_id = db.Column("cars_id", db.Integer, db.ForeignKey('Cars.id'), nullable=False)
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    spec = db.Column('specializacja', db.String(55))
+    pavadinimas = db.Column('pavadinimas', db.String(55))
+    rating = db.Column('rating', db.Integer())
+    date_created = db.Column('sukurimo data', db.DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, auto_id, user_id, pavadinimas, spec, rating):
+        self.user_id = user_id
+        self.auto_id = auto_id
+        self.pavadinimas = pavadinimas
+        self.spec = spec
+        self.rating = rating
        

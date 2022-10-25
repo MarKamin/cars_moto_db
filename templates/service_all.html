@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Servisai</title>
+    <link rel="stylesheet" href="style.css">
+   {%  block main %}
+  </head>
+  <body>
+      <h3>Visi servisai</h3>
+      <hr></hr>
+      <table>
+        <thead>
+           <tr>
+              <th>USER ID</th>
+              <th>CAR ID</th>
+              <th>Pavadinimas</th>
+              <th>Specializacija</th>
+              <th>Ivertinimas</th>
+           </tr>
+        </thead>
+        
+        <tbody>
+           {% for serv in taisykla %}
+              <tr>
+                 <td>{{ serv.user_id }}</td>
+                 <td>{{ serv.auto_id }}</td>
+                 <td>{{ serv.pavadinimas }}</td>
+                 <td>{{ serv.spec }}</td>
+                 <td>{{ serv.rating }}</td>
+              </tr>
+           {% endfor %}
+        </tbody>
+     </table>
+  </body>
+</html>
+
+{% endblock %}

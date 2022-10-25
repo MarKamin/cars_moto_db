@@ -1,0 +1,32 @@
+{% extends 'base.html' %} 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pridekite serviso irasa</title>
+    <link rel="stylesheet" href="style.css">
+    {% block main %}
+  </head>
+  <body>
+      <h3>Pridekite serviso irasa</h3>
+      <hr></hr>
+      <form action="/create_service" method= "post"><br>
+            <label for="user_id">User ID</label><br>
+            <input type='text' name='user_id' placeholder="User ID" /><br>
+            <label for="car_id">Car ID</label><br>
+            <input type='text' name='car_id' placeholder="Car ID" /><br>
+            <label for="name">Pavadinimas</label><br>
+            <input type='text' name='name' placeholder="Pavadinimas" /><br>
+            <label for="spec">Specializacija</label><br>
+            <input type='text' name='spec' placeholder="Specializacija" /><br>
+            <label for="rating">Ivertinimas(iki 10)</label><br>
+            <input type='text' name='rating' placeholder="Ivertinimas" /><br>
+            <input type = "submit" value = "Sukurti" />
+       </form>   
+  </body>
+</html>
+
+{% endblock %}
+

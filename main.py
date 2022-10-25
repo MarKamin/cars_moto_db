@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from models import Users, app, db, Cars, Moto
-from sqlalchemy.exc import IntegrityError
+# from flask_sqlalchemy import SQLAlchemy
+from models import Users, app, db, Cars, Moto, AutoTaisykla
+from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy import select
 
 @app.route("/home")
 def home():
     viso = Users.query.count()
     viso_auto= Cars.query.count()
     viso_moto= Moto.query.count()
-    return render_template('home.html', viso=viso, viso_auto=viso_auto, viso_moto=viso_moto)
+    viso_serv = AutoTaisykla.query.count()
+    return render_template('home.html', viso=viso, viso_auto=viso_auto, viso_moto=viso_moto, viso_serv=viso_serv)
 
 @app.route("/create_user", methods = ['GET', 'POST'])
 def create_user():
@@ -31,12 +33,19 @@ def create_user():
 def create_car():
     if request.method == 'POST':
         try:
-            masina = Cars( request.form['user_id'], request.form['brand'],request.form['model'],request.form['year'], request.form['rida'],
-        request.form['kuras'],request.form['kebulas'],request.form['kaina'],request.form['vin_code'])
+            stmt = db.select(Users).where(Users.id == request.form['user_id'])
+            print(type(stmt))
+            user = db.session.scalars(stmt).one()
+            # Scalar = Return the first element of the first result or None if no rows present. If multiple rows are returned, raises MultipleResultsFound.
+            print(type(user))
+            masina = Cars( user.id, request.form['brand'],request.form['model'],request.form['year'], request.form['rida'],
+            request.form['kuras'],request.form['kebulas'],request.form['kaina'],request.form['vin_code'])
             db.session.add(masina)
             db.session.commit()
             return '''<h1>Irasas sukurtas sekmingai</h1>
-                        <a href="/home"> I pradzia </a> '''
+                            <a href="/home"> I pradzia </a> '''
+        except NoResultFound:
+            return '<h1> Userio nera </h1>'
         except ValueError:
             db.session.rollback()
             return '''<h1>Kazka ivedete netaip Perziurekite ir bandykite dar karta.</h1>
@@ -52,9 +61,21 @@ def create_moto():
         db.session.commit()
     return render_template('create_moto.html')
 
+@app.route("/create_service", methods = ['GET', 'POST'])
+def create_service():
+    if request.method == 'POST':
+         serv = AutoTaisykla( request.form['user_id'],request.form['car_id'],request.form['name'], request.form['spec'], request.form['rating'] )
+         db.session.add(serv)
+         db.session.commit()
+    return render_template('create_service.html')
+
 @app.route('/users_all')
 def show_all_users():
     return render_template('users_all.html', users = Users.query.all() )
+
+@app.route('/service_all')
+def show_all_service():
+    return render_template('service_all.html', taisykla = AutoTaisykla.query.all() )
 
 @app.route('/cars_all')
 def show_all_cars():
