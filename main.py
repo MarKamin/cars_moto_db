@@ -68,9 +68,21 @@ def create_moto():
 @app.route("/create_service", methods = ['GET', 'POST'])
 def create_service():
     if request.method == 'POST':
-         serv = AutoTaisykla( request.form['user_id'],request.form['car_id'],request.form['name'], request.form['spec'], request.form['rating'] )
-         db.session.add(serv)
-         db.session.commit()
+        try:
+            stmt = db.select(Users).where(Users.id == request.form['user_id'])
+            user = db.session.scalars(stmt).one()
+            serv = AutoTaisykla( user.id, request.form['car_id'],request.form['name'], request.form['spec'], request.form['rating'] )
+            db.session.add(serv)
+            db.session.commit()
+            return '''<h1>Serviso irasas sukurtas sekmingai</h1>
+                            <a href="/home"> I pradzia </a> 
+                            <a href="/create_service"> Kurti kita irasa </a> '''
+        except NoResultFound:
+            return '<h1> Userio nera </h1>'
+        except StatementError:
+            db.session.rollback()
+            return '''<h1>Kazka ivedete netaip Perziurekite ir bandykite dar karta.</h1>
+                      <a href="/create_service"> I pradzia </a> '''
     return render_template('create_service.html')
 
 @app.route('/users_all')
@@ -89,7 +101,7 @@ def show_all_cars():
 
 @app.route('/cars_exp')
 def cars_exp():
-    expensive = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id, 
+    expensive = db.session.execute(db.select(Cars.kaina, Cars.brand, Cars.user_id, Cars.id,
     Cars.date_created, Cars.kebulas, Cars.kuras, Cars.model, Cars.year, Cars.rida, Cars.vin_code).filter(Cars.kaina >= 5000)).all()
     return render_template('cars_exp.html', expensive=expensive)
 
@@ -134,7 +146,6 @@ def delete_auto():
     print(id)
     auto_trinamas = Cars.query.filter_by(id=id).first()
     print(type(auto_trinamas))
-    print(auto_trinamas)
     db.session.delete(auto_trinamas)
     db.session.commit()
         
@@ -181,4 +192,6 @@ if app.debug:
 if __name__ == "__main__":
     app.run(debug=True)
     db.create_all()
+
+
 
